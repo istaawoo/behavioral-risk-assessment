@@ -103,7 +103,36 @@ def run_analysis(
         "notes": "",
     }
     
-    if llm_enabled:
+    # First, check for manual LLM file (user-provided via ChatGPT/Gemini)
+    manual_llm_path = Path("output/llm_qualitative.json")
+    if manual_llm_path.exists():
+        try:
+            logger.info("Found manual LLM file at output/llm_qualitative.json")
+            import json
+            with open(manual_llm_path, 'r') as f:
+                llm_response = json.load(f)
+            
+            qualitative_data.update({
+                "risk_tolerance_label": llm_response.get("risk_tolerance_label", risk_label),
+                "traits": llm_response.get("traits", []),
+                "biases": llm_response.get("biases", []),
+                "narrative": llm_response.get("narrative", ""),
+            })
+            
+            rec_data = llm_response.get("recommendations", {})
+            recommendations_data.update({
+                "portfolio_modifier": rec_data.get("portfolio_modifier", ""),
+                "sector_pref": rec_data.get("sector_pref", []),
+                "notes": rec_data.get("notes", ""),
+            })
+            
+            llm_used = True
+            logger.info("Manual LLM analysis loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load manual LLM file: {e}")
+    
+    # If no manual file and LLM enabled, try API call
+    elif llm_enabled:
         try:
             logger.info("Attempting LLM analysis...")
             prompt = prepare_llm_prompt(text, max_tokens=5000)
@@ -128,9 +157,13 @@ def run_analysis(
                 logger.info("LLM analysis successful")
         except Exception as e:
             logger.error(f"LLM analysis failed: {e}. Continuing with quantitative-only profile.")
-    else:
+    
+    # If no LLM data at all, provide default message
+    if not llm_used and not qualitative_data["narrative"]:
         qualitative_data["narrative"] = (
-            "Qualitative analysis disabled. Run with --llm-on to enable LLM-based insights."
+            "Qualitative analysis not available. "
+            "Use the Streamlit UI to download text corpus and analyze with ChatGPT/Gemini, "
+            "then save response as output/llm_qualitative.json and re-run."
         )
     
     # Step 5: Assemble profile
