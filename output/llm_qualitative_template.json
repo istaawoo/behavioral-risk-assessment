@@ -1,0 +1,22 @@
+{
+  "risk_tolerance_label": "Moderately Aggressive",
+  "traits": [
+    "growth-oriented",
+    "data-driven",
+    "optimistic"
+  ],
+  "biases": [
+    "confirmation_bias",
+    "overconfidence_bias"
+  ],
+  "narrative": "Replace this with the detailed analysis from ChatGPT or Gemini. Include personality insights, investment philosophy, and behavioral patterns observed in the text corpus.",
+  "recommendations": {
+    "portfolio_modifier": "increase_equities_by_10pct",
+    "sector_pref": [
+      "Technology",
+      "Healthcare",
+      "Semiconductors"
+    ],
+    "notes": "Replace with specific portfolio guidance based on the behavioral analysis."
+  }
+}

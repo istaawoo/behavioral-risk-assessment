@@ -80,8 +80,10 @@ def compute_risk_tolerance_score(
     """
     Compute overall risk tolerance score (0-1).
     
-    Formula:
-        risk_score = 0.5*momentum_bias + 0.3*sentiment + 0.2*volatility_tolerance - 0.1*safety_focus
+    Formula (adjusted to favor moderately aggressive outcomes):
+        risk_score = 0.4*growth_focus + 0.35*momentum_bias + 0.25*sentiment - 0.15*safety_focus + 0.15
+    
+    The +0.15 baseline boost ensures profiles trend toward moderate-aggressive rather than conservative.
     
     These weights are editable; adjust as needed per behavioral analysis.
     
@@ -93,27 +95,30 @@ def compute_risk_tolerance_score(
         Risk tolerance score 0-1
     """
     if weights is None:
-        # Default weights: tune these to emphasize different factors
+        # Adjusted weights: favor growth and momentum more heavily
         weights = {
-            "momentum": 0.5,
-            "sentiment": 0.3,
-            "volatility": 0.2,
-            "safety": -0.1,  # Negative weight: high safety focus lowers risk score
+            "growth": 0.4,      # Growth focus is primary indicator
+            "momentum": 0.35,   # Momentum signals confidence
+            "sentiment": 0.25,  # Optimism correlates with risk-taking
+            "safety": -0.15,    # Safety focus reduces risk appetite
+            "baseline": 0.15,   # Baseline boost to trend toward aggressive
         }
     
     keyword_scores = quant_metrics.get("keyword_scores", {})
     sentiment = quant_metrics.get("sentiment", 0.5)
     
+    growth_focus = keyword_scores.get("growth", 0.0)
     momentum_bias = keyword_scores.get("momentum", 0.0)
     safety_focus = keyword_scores.get("safety", 0.0)
     volatility_tolerance = keyword_scores.get("volatility", 0.0)
     
-    # Compute weighted sum
+    # Compute weighted sum with baseline boost
     score = (
-        weights.get("momentum", 0.5) * momentum_bias
-        + weights.get("sentiment", 0.3) * sentiment
-        + weights.get("volatility", 0.2) * volatility_tolerance
-        + weights.get("safety", -0.1) * safety_focus
+        weights.get("growth", 0.4) * growth_focus
+        + weights.get("momentum", 0.35) * momentum_bias
+        + weights.get("sentiment", 0.25) * sentiment
+        + weights.get("safety", -0.15) * safety_focus
+        + weights.get("baseline", 0.15)  # Baseline shift toward aggressive
     )
     
     # Clamp to 0-1

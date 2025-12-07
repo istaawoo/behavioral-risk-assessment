@@ -75,10 +75,18 @@ def compute_basic_stats(text: str) -> Dict:
     tokens = tokenize(text)
     word_count = len(tokens)
     
-    # Split sentences on common punctuation
-    sentences = re.split(r'[.!?]+', text)
-    sentences = [s.strip() for s in sentences if s.strip()]
+    # Improved sentence detection for transcripts
+    # Split on punctuation OR newlines (common in transcripts)
+    # Also consider common transcript markers like timestamps
+    sentences = re.split(r'[.!?]+|\n{2,}', text)
+    sentences = [s.strip() for s in sentences if s.strip() and len(s.strip()) > 10]
+    
+    # If sentence count seems too low (transcripts without punctuation),
+    # estimate based on word count (avg ~15-20 words per sentence)
     sentence_count = len(sentences)
+    if word_count > 1000 and sentence_count < word_count / 100:
+        # Likely a transcript with missing punctuation
+        sentence_count = word_count // 18  # Estimate ~18 words per sentence
     
     avg_sentence_length = word_count / sentence_count if sentence_count > 0 else 0
     
