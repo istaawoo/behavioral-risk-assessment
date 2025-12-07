@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "created_at": "2025-12-07T10:23:01.397184Z",
+    "source_files": [
+      "linkedin.txt",
+      "podcast_transcript.txt",
+      "social_posts.txt"
+    ],
+    "llm_used": false
+  },
+  "quantitative": {
+    "word_count": 475,
+    "sentence_count": 54,
+    "mentions": {
+      "growth": 12,
+      "safety": 4,
+      "momentum": 8,
+      "volatility": 6,
+      "emotional": 5
+    },
+    "sentiment": 0.575,
+    "keyword_rates_per_1000": {
+      "growth": 25.26,
+      "safety": 8.42,
+      "momentum": 16.84,
+      "volatility": 12.63,
+      "emotional": 10.53
+    },
+    "scores": {
+      "growth_focus": 1.0,
+      "safety_focus": 1.0,
+      "momentum_bias": 1.0,
+      "volatility_tolerance": 1.0,
+      "emotional_intensity": 1.0,
+      "risk_tolerance": 0.772
+    }
+  },
+  "qualitative": {
+    "risk_tolerance_label": "Moderately Aggressive",
+    "traits": [],
+    "biases": [],
+    "narrative": ""
+  },
+  "recommendations": {
+    "portfolio_modifier": "",
+    "sector_pref": [],
+    "notes": ""
+  }
+}

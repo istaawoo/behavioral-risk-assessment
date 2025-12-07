@@ -1,19 +1,37 @@
-# 🎈 Blank app template
+#  Behavioral Risk Assessment
 
-A simple Streamlit app template for you to modify!
+A Streamlit-based application for analyzing investment psychology and behavioral patterns from text data.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+##  Quick Start
 
-### How to run it on your own machine
+### Installation
+\\\ash
+pip install -r requirements.txt
+\\\
 
-1. Install the requirements
+### Run Analysis
+\\\ash
+# Interactive UI
+streamlit run behavioral/streaming_ui.py
 
-   ```
-   $ pip install -r requirements.txt
-   ```
+# Or command-line (offline)
+python behavioral/behavioral_runner.py --input behavioral_data --output output/behavioral_profile.json --llm-on False
+\\\
 
-2. Run the app
+##  Project Structure
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+behavioral/                 # Core analysis module
+behavioral_data/           # Input text files
+output/                    # Generated profiles
+
+##  Documentation
+
+See **behavioral/README.md** for comprehensive usage guide, schema details, and troubleshooting.
+
+See **IMPLEMENTATION_SUMMARY.md** for architecture and implementation details.
+
+##  Status
+
+ Complete and production-ready  
+ All tests passing  
+ All acceptance criteria met
