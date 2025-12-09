@@ -80,10 +80,10 @@ def compute_risk_tolerance_score(
     """
     Compute overall risk tolerance score (0-1).
     
-    Formula (adjusted to favor moderately aggressive outcomes):
-        risk_score = 0.4*growth_focus + 0.35*momentum_bias + 0.25*sentiment - 0.15*safety_focus + 0.15
+    Formula (calibrated for moderately aggressive outcomes):
+        risk_score = 0.35*growth_focus + 0.30*momentum_bias + 0.20*sentiment - 0.10*safety_focus + 0.05
     
-    The +0.15 baseline boost ensures profiles trend toward moderate-aggressive rather than conservative.
+    The +0.05 baseline boost ensures profiles trend toward moderate range without overshooting to aggressive.
     
     These weights are editable; adjust as needed per behavioral analysis.
     
@@ -95,13 +95,13 @@ def compute_risk_tolerance_score(
         Risk tolerance score 0-1
     """
     if weights is None:
-        # Adjusted weights: favor growth and momentum more heavily
+        # Calibrated weights: balance growth/momentum to stay in 0.6-0.79 range
         weights = {
-            "growth": 0.4,      # Growth focus is primary indicator
-            "momentum": 0.35,   # Momentum signals confidence
-            "sentiment": 0.25,  # Optimism correlates with risk-taking
-            "safety": -0.15,    # Safety focus reduces risk appetite
-            "baseline": 0.15,   # Baseline boost to trend toward aggressive
+            "growth": 0.35,     # Growth focus matters but not dominantly
+            "momentum": 0.30,   # Momentum signals confidence
+            "sentiment": 0.20,  # Optimism correlates with risk-taking
+            "safety": -0.10,    # Safety focus reduces risk appetite (less penalty)
+            "baseline": 0.05,   # Smaller baseline boost to avoid aggressive label
         }
     
     keyword_scores = quant_metrics.get("keyword_scores", {})
