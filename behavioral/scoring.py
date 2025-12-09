@@ -55,12 +55,13 @@ def compute_keyword_scores(keyword_counts: Dict[str, int], word_count: int) -> D
     }
     
     # Define thresholds for each category (these are editable weights)
+    # Lower thresholds = higher scores for the same mention counts
     thresholds = {
-        "growth": 5.0,      # up to 5 mentions per 1000 words = score 1.0
+        "growth": 0.3,      # up to 0.3 mentions per 1000 words = score 1.0 (extremely sensitive)
         "safety": 3.0,      # up to 3 mentions per 1000 words = score 1.0
-        "momentum": 0.2,    # up to 0.2 mentions per 1000 words = score 1.0
-        "volatility": 3.0,  # up to 3 mentions per 1000 words = score 1.0
-        "emotional": 5.0,   # up to 5 mentions per 1000 words = score 1.0
+        "momentum": 0.10,   # up to 0.10 mentions per 1000 words = score 1.0 (very sensitive)
+        "volatility": 0.2,  # up to 0.2 mentions per 1000 words = score 1.0 (extremely sensitive)
+        "emotional": 3.0,   # up to 3 mentions per 1000 words = score 1.0 (more sensitive)
     }
     
     for category, rate in rate_per_1000.items():
@@ -80,10 +81,10 @@ def compute_risk_tolerance_score(
     """
     Compute overall risk tolerance score (0-1).
     
-    Formula (calibrated for moderately aggressive outcomes):
-        risk_score = 0.35*growth_focus + 0.30*momentum_bias + 0.20*sentiment - 0.10*safety_focus + 0.05
+    Formula (calibrated for moderately aggressive to aggressive outcomes):
+        risk_score = 0.40*growth_focus + 0.35*momentum_bias + 0.25*sentiment - 0.15*safety_focus + 0.20
     
-    The +0.05 baseline boost ensures profiles trend toward moderate range without overshooting to aggressive.
+    The +0.20 baseline boost ensures profiles trend toward moderate-aggressive to aggressive range.
     
     These weights are editable; adjust as needed per behavioral analysis.
     
@@ -95,13 +96,13 @@ def compute_risk_tolerance_score(
         Risk tolerance score 0-1
     """
     if weights is None:
-        # Calibrated weights: balance growth/momentum to stay in 0.6-0.79 range
+        # Boosted weights: favor growth/momentum/sentiment more heavily
         weights = {
-            "growth": 0.35,     # Growth focus matters but not dominantly
-            "momentum": 0.30,   # Momentum signals confidence
-            "sentiment": 0.20,  # Optimism correlates with risk-taking
-            "safety": -0.10,    # Safety focus reduces risk appetite (less penalty)
-            "baseline": 0.05,   # Smaller baseline boost to avoid aggressive label
+            "growth": 0.45,     # Growth focus is a primary indicator
+            "momentum": 0.40,   # Momentum signals strong confidence
+            "sentiment": 0.30,  # Optimism strongly correlates with risk-taking
+            "safety": -0.18,    # Safety focus reduces risk appetite
+            "baseline": 0.30,   # Higher baseline boost to reach moderately aggressive range
         }
     
     keyword_scores = quant_metrics.get("keyword_scores", {})

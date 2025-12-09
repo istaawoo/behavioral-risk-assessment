@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "created_at": "2025-12-09T14:47:50.719838Z",
+    "created_at": "2025-12-09T14:55:25.913119Z",
     "source_files": [
       "linkedin.txt",
       "podcast_transcript.txt",
@@ -27,12 +27,12 @@
       "emotional": 0.36
     },
     "scores": {
-      "growth_focus": 0.008,
+      "growth_focus": 0.134,
       "safety_focus": 0.134,
-      "momentum_bias": 0.202,
-      "volatility_tolerance": 0.04,
-      "emotional_intensity": 0.073,
-      "risk_tolerance": 0.243
+      "momentum_bias": 0.403,
+      "volatility_tolerance": 0.605,
+      "emotional_intensity": 0.121,
+      "risk_tolerance": 0.712
     }
   },
   "qualitative": {
